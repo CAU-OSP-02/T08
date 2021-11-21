@@ -1,4 +1,4 @@
-[C언어] [오후 6:23] import pygame
+import pygame
 import random
 
 BLACK = (0,0,0)
