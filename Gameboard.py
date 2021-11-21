@@ -2,35 +2,41 @@ import pygame
 
 WHITE=(255,255,255)
 BLACK=(0,0,0)
-pad_width=1024
+pad_width=512
 pad_height=512
-
+tileS=128
 class Ground(pygame.sprite.Sprite):
        
-       def __init__(self, col, row):
+       def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
 
-        self.grid_x = row * 64
-        self.grid_y = col * 64
-        self.fill(BLACK)
-        self.rect = self.image.get_rect()
+        self.x = x * tileS
+        self.y = y * tileS
+        pygame.draw.rect(gamepad,BLACK,[-pad_width/2+(2*x+1)*tileS/2, pad_height/2-(2*y+1)*tileS/2,tileS,tileS])
 
-        self.rect.x = self.grid_x
-        self.rect.y = self.grid_y
 
 class Wall(pygame.sprite.Sprite):
     
-    def __init__(self, col, row):
+    def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
 
-        self.grid_x = row * 64
-        self.grid_y = col * 64
-        self.fill(WHITE)
-        self.rect = self.image.get_rect()
+        self.x = x * tileS
+        self.y = y * tileS
+        pygame.draw.rect(gamepad,WHITE,[-pad_width/2+(2*x+1)*tileS/2, pad_height/2-(2*y+1)*tileS/2,tileS,tileS])
 
-        self.rect.x = self.grid_x
-        self.rect.y = self.grid_y
-        
+
+def BackGround():
+
+    MapData=[[0,0,1,1,1,1,0,0],[1,1,0,0,0,0,1,1],[1,0,1,0,1,0,1,0],[0,1,0,1,0,1,0,1]]
+    for col in range(0,3):
+        for row in range(0,3):
+            if MapData[col][row] == 1:
+                Ground(col, row)
+
+            if MapData[col][row] == 0:
+                Wall(col, row)
+
+    
 def runGame():
     global gamepad, clock
 
@@ -40,7 +46,7 @@ def runGame():
             if event.type==pygame.QUIT:
                 crashed=True
 
-        gamepad.fill(WHITE)
+        BackGround()
         pygame.display.update()
         clock.tick(60)
 
