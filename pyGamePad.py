@@ -1,7 +1,7 @@
 import pygame
 
-WHITE = (255, 255, 255)
-pad_width = 1280
+BLACK = (0, 0, 0)
+pad_width = 960
 pad_height = 720
 
 def runGame():
@@ -13,7 +13,7 @@ def runGame():
             if event.type == pygame.QUIT:
                 crashed = True
 
-        gamepad.fill(WHITE)
+        gamepad.fill(BLACK)
         pygame.display.update()
         clock.tick(60)
 
