@@ -1,1 +1,107 @@
-i did it
+
+import pygame
+import random
+
+BLACK = (0,0,0)
+WHITE = (255,255,255)
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+one_blocksize = 50
+gamemap = [
+        ['벽', '벽', '벽', '벽', '벽', '벽'],
+        ['벽', 'x', '벽', 'x', 'x', '벽'],
+        ['벽', 'x', '벽', '벽', 'x', '벽'],
+        ['벽', 'x', '벽', '벽', 'x', '벽'],
+        ['벽', 'x', 'x', '벽', 'x', '벽'],
+        ['벽', '벽', 'x', '벽', 'x', '벽'],
+        ['벽', '벽', 'x', '팩맨', 'x', '벽'],
+        ['벽', '벽', '벽', '벽', '벽', '벽'],
+    ]    
+
+
+def get_random_color():
+  return (random.randint(0, 255),random.randint(0, 255),random.randint(0, 255))
+
+def run_game():
+    crashed = False
+    while not crashed:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    move_pacman(-1,0)
+                if event.key == pygame.K_RIGHT:
+                    move_pacman(+1,0)
+                if event.key == pygame.K_DOWN:
+                    move_pacman(0,+1)
+                if event.key == pygame.K_UP:
+                    move_pacman(0,-1)
+                    
+            if event.type == pygame.QUIT:
+                crashed = True
+        pygame.display.update()
+        clock.tick(60)
+    pygame.quit()
+
+
+def make_trees():
+   for x in range(len(gamemap)):
+        for y in range(len(gamemap[x])):
+            if gamemap[x][y] == '벽':
+                gamepad.blit(resized_tree, (x*one_blocksize,y*one_blocksize))
+            elif gamemap[x][y] == '팩맨':
+                gamepad.blit(resized_pacman, (x*one_blocksize, y*one_blocksize))
+            elif gamemap[x][y] == 'x':
+                gamepad.blit(resized_dot, (x*one_blocksize, y*one_blocksize))
+
+def find_pacman():
+    for p in range(len(gamemap)):
+        for q in range(len(gamemap[p])):
+            if gamemap[p][q] == '팩맨':
+                return [p, q]
+
+def move_pacman(x_diff, y_diff):
+    current_x, current_y = find_pacman()
+    next_x = current_x + x_diff
+    next_y = current_y + y_diff
+    if not check_tree(next_x, next_y):
+        gamemap[next_x][next_y] = '팩맨'
+        gamemap[current_x][current_y] = 'x'
+        make_trees()
+
+
+def check_tree(x, y):
+    if gamemap[x][y] == '벽':
+        return True
+    else:
+        return False
+
+
+
+def main():
+    global gamepad, clock, resized_tree, resized_pacman, resized_dot
+    
+    pygame.init()
+    gamepad = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption("T08packman")
+    font = pygame.font.SysFont("arial", 50, True, False)
+    title = font.render("HamPackHang", True, WHITE, get_random_color())
+    tree = pygame.image.load('C:/Users/solom/Downloads/tree.png')
+    resized_tree = pygame.transform.scale(tree,(one_blocksize,one_blocksize))
+    pacman = pygame.image.load('C:/Users/solom/Downloads/pacman.png')
+    resized_pacman = pygame.transform.scale(pacman, (one_blocksize,one_blocksize))
+    dot = pygame.image.load('C:/Users/solom/Downloads/dot.png')
+    resized_dot = pygame.transform.scale(dot, (one_blocksize,one_blocksize))
+
+
+
+
+    make_trees()
+    clock = pygame.time.Clock()
+
+    run_game()
+
+ 
+    
+main()
+
+
