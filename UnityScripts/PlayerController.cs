@@ -2,11 +2,14 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private Vector2 moveDirection = Vector2.right;
+    private LayerMask tileLayer;
+    private float rayDistance = 0.55f;
+    private Vector2 moveDirection = Vector2.zero;
     private Movement2D movement2D;
 
     private void Awake()
     {
+        tileLayer = 1 << LayerMask.NameToLayer("Tile");
         movement2D = GetComponent<Movement2D>();
     }
 
@@ -29,7 +32,8 @@ public class PlayerController : MonoBehaviour
             moveDirection = Vector2.down;
         }
 
-        if (Input.anyKeyDown)
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, moveDirection, rayDistance, tileLayer);
+        if (hit.transform == null)
         {
             movement2D.MoveTo(moveDirection);
         }
