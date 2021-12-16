@@ -5,11 +5,12 @@ using UnityEngine;
 public class Movement2D : MonoBehaviour
 {
     [SerializeField]
-    private float moveTime = 0.2f;
-    private bool isMove = false;
+    private float moveTime = 0.2f; 
+    private bool isMove = false;   
 
     public bool MoveTo(Vector3 moveDirection)
     {
+        
         if (isMove)
         {
             return false;
@@ -26,7 +27,7 @@ public class Movement2D : MonoBehaviour
         float percent = 0;
 
         isMove = true;
-        while( percent < moveTime)
+        while (percent < moveTime)
         {
             percent += Time.deltaTime;
             transform.position = Vector2.Lerp(startPosition, endPosition, percent / moveTime);
