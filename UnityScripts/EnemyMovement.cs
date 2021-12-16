@@ -1,7 +1,9 @@
 using UnityEngine;
 
-public class EnemyFSM : MonoBehaviour
+public class EnemyMovement : MonoBehaviour
 {
+    private LayerMask tileLayer;
+    private float rayDistance = 0.55f;
     private Vector2    moveDirection = Vector2.right;
     private Direction  direction = Direction.Right;
 
@@ -9,6 +11,8 @@ public class EnemyFSM : MonoBehaviour
 
     private void Awake()
     {
+        tileLayer = 1 << LayerMask.NameToLayer("Tile");
+
         movement2D = GetComponent<Movement2D>();
 
         SetMoveDirectionByRandom();
@@ -16,12 +20,21 @@ public class EnemyFSM : MonoBehaviour
 
     private void Update()
     {
-        movement2D.MoveTo(moveDirection);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, moveDirection, rayDistance, tileLayer);
+
+        if (hit.transform == null)
+        {
+            movement2D.MoveTo(moveDirection);
+        }
+        else
+        {
+            SetMoveDirectionByRandom();
+        }
     }
 
     private void SetMoveDirectionByRandom()
     {
-        direction      = (Direction)Random.Range(0, (int)Direction.Count);
+        direction      = (Direction)Random.Range(0, 4);
         moveDirection  = Vector3FromEnum(direction);
     }
 
